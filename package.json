@@ -26,6 +26,7 @@
     "igniteui-angular": "5.2.0-beta.1",
     "igniteui-cli": "^1.0.4",
     "rxjs": "^5.5.2",
+    "@infragistics/ignite-ui-xplatform-for-angular": "^18.1.596-dev",
     "zone.js": "^0.8.14",
     "classlist.js": "^1.1.20150312",
     "intl": "^1.2.5",

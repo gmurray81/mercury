@@ -1,0 +1,15 @@
+<div class="grid-container">
+	<igx-grid id="grid1" #grid1 [data]="stockData" (onSelection)="onSelection($event)" [height]="'700px'" [width]="'1200px'">
+		<igx-column field="Ticker" [sortable]="true" header="Ticker" [filterable]="true" width="100px"></igx-column>
+		<igx-column field="TimeStamp" header="Date" [dataType]="Date" width="200px"></igx-column>
+		<igx-column field="Open" header="Open" width="100px"></igx-column>
+		<igx-column field="High" header="High" width="100px"></igx-column>
+		<igx-column field="Low" header="Low" width="100px"></igx-column>
+		<igx-column field="Close" header="Close" width="100px"></igx-column>
+		<igx-column field="Volume" header="Volume" width="100px"></igx-column>
+		<igx-column field="AdjustedOpen" header="Adj-Open" width="100px"></igx-column>
+		<igx-column field="AdjustedLow" header="Adj-Low" width="100px"></igx-column>
+		<igx-column field="AdjustedClose" header="Adj-Close" width="100px"></igx-column>
+		<igx-column field="AdjustedVolume" header="Adj-Volume" width="100px"></igx-column>
+	</igx-grid>
+</div>
