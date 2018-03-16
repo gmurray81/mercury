@@ -1,5 +1,5 @@
 <div class="grid-container">
-	<igx-grid id="grid1" #grid1 [data]="stockData" (onSelection)="onSelection($event)" [height]="'700px'" [width]="'1050px'">
+	<!-- <igx-grid id="grid1" #grid1 [data]="stockData" (onSelection)="onSelection($event)" [height]="'100%'" [width]="'100%'">
 		<igx-column field="Ticker" [sortable]="true" header="Ticker" [filterable]="true" width="100px"></igx-column>
 		<igx-column field="Open" header="Open" width="100px"></igx-column>
 		<igx-column field="High" header="High" width="100px"></igx-column>
@@ -10,5 +10,23 @@
 		<igx-column field="AdjustedLow" header="Adj-Low" width="100px"></igx-column>
 		<igx-column field="AdjustedClose" header="Adj-Close" width="100px"></igx-column>
 		<igx-column field="AdjustedVolume" header="Adj-Volume" width="100px"></igx-column>
+	</igx-grid> -->
+
+	<ng-template #checkbox let-cell="cell" let-value>
+		<input type="checkbox" [checked]="value" (change)="onChanged($event, cell)"/>
+	</ng-template>
+
+	<igx-grid id="grid1" #grid1 [data]="histData" (onSelection)="onSelection($event)"
+		(onEditDone)="onEditDone($event)"
+		[height]="'100%'" [width]="'100%'">
+		<igx-column field="Selected" header="Selected" width="50px"
+		[dataType]="boolType" #selectedColumn
+		></igx-column>
+		<igx-column field="Open" header="Open" width="100px"></igx-column>
+		<igx-column field="High" header="High" width="100px"></igx-column>
+		<igx-column field="Low" header="Low" width="100px"></igx-column>
+		<igx-column field="Close" header="Close" width="100px"></igx-column>
+		<igx-column field="Volume" header="Volume" width="100px"></igx-column>
+		<igx-column field="TimeStamp" header="TimeStamp" width="400px"></igx-column>
 	</igx-grid>
 </div>

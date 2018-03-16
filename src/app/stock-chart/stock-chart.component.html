@@ -1,2 +1,7 @@
-<ig-financial-chart style="width: 800px; height:600px" [dataSource]="stockData" [isWindowSyncedToVisibleRange]=true isHorizontalZoomEnabled="true">
-</ig-financial-chart>
+<igx-financial-chart 
+    style="width: 100%; height:100%" 
+    (seriesPointerDown)="onPointerDown($event)"
+    (seriesAdded)="onSeriesAdded($event)"
+    [isWindowSyncedToVisibleRange]="true"
+    [dataSource]="stockData">
+</igx-financial-chart>

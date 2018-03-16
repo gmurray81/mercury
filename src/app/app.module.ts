@@ -10,8 +10,7 @@ import { HomeComponent } from './home/home.component'
 import { StockGridComponent } from './stock-grid/stock-grid.component'
 import { StockDataService } from './services/stock-data.service'
 import { StockChartComponent } from './stock-chart/stock-chart.component'
-import { IgFinancialChartModule } from '@infragistics/ignite-ui-xplatform-for-angular/ES5/ig-financialchart-module'
-import { IgDataChartInteractivityModule } from '@infragistics/ignite-ui-xplatform-for-angular/ES5/ig-datachart-interactivity-module'
+import { IgxFinancialChartModule } from '@infragistics/igniteui-angular-charts/ES5/igx-financial-chart-module'
 
 @NgModule({
 	declarations: [
@@ -30,8 +29,7 @@ import { IgDataChartInteractivityModule } from '@infragistics/ignite-ui-xplatfor
 		IgxLayoutModule,
 		IgxRippleModule,
 		IgxGridModule.forRoot(),
-		IgFinancialChartModule,
-		IgDataChartInteractivityModule,
+		IgxFinancialChartModule
 	],
 	providers: [StockDataService],
 	bootstrap: [AppComponent]

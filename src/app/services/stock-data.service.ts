@@ -30,6 +30,7 @@ export class StockDataService {
         function toHistoricData(alphaVantageRecord): StockData {
             const stockRecord = new StockData(alphaVantageRecord)
             stockRecord.TimeStamp = new Date(alphaVantageRecord.TimeStamp)
+            stockRecord.Selected = false;
             return stockRecord
         }
     }

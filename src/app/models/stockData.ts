@@ -14,4 +14,5 @@ export class StockData {
     public Low: number
     public Close: number
     public Volume: number
+    public Selected: boolean
 }

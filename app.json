@@ -1,0 +1,19 @@
+{
+    "devtools_port": 9090,
+    "startup_app": {
+        "name": "OpenfinPOC",
+        "description": "OpenFin POC",
+        "url": "http://localhost:4200/stock-chart",
+        "uuid": "OpenfinPOC-n6txa0pnpv7rq7zj1w0zfr",
+        "autoShow": true
+    },
+    "runtime": {
+        "arguments": "--enable-experimental-web-platform-features",
+        "version": "beta"
+    },
+    "shortcut": {
+        "company": "Infragistics",
+        "description": "Infragistics Openfin POC",
+        "name": "Infragistics Openfin POC"
+    }
+}
