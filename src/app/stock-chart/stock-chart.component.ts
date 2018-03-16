@@ -1,7 +1,8 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild } from '@angular/core'
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, Input } from '@angular/core'
 
 import { StockData } from '../models/stockData'
 import { StockDataService } from '../services/stock-data.service'
+import { WikiPriceData } from '../models/wikiPriceData';
 
 @Component({
   selector: 'app-stock-chart',
@@ -17,5 +18,8 @@ export class StockChartComponent implements OnInit {
     this.stockData = this.stockDataService.getHistoricData()
   }
 
-
+  @Input()
+  public set stockDisplayed(stockSelection: WikiPriceData) {
+    this.stockData = this.stockDataService.getTickerHistory(stockSelection)
+  }
 }

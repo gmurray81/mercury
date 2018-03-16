@@ -1,6 +1,2 @@
-<div class="main" igxLayout>
-	<div igxFlex>
-		<app-stock-grid [tickerSelected]="selectTicker"></app-stock-grid>
-		<app-stock-chart></app-stock-chart>
-	</div>
-</div>
+<app-stock-grid (stockSelected)="onStockSelected($event)"></app-stock-grid>
+<app-stock-chart [stockDisplayed]="selectedStock"></app-stock-chart>

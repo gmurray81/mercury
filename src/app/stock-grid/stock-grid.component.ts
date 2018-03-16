@@ -1,10 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, Input } from '@angular/core'
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, Input, Output, EventEmitter } from '@angular/core'
 
 import { WikiPriceData } from '../models/wikiPriceData'
 import { StockDataService } from '../services/stock-data.service'
 import { IgxGridComponent } from 'igniteui-angular/grid/grid.component'
 import { IgxColumnComponent } from 'igniteui-angular/grid/column.component'
 import { IgxGridCellComponent } from 'igniteui-angular/grid/cell.component'
+import { IgxGridRowComponent } from 'igniteui-angular/grid/row.component';
 
 @Component({
   selector: 'app-stock-grid',
@@ -13,7 +14,7 @@ import { IgxGridCellComponent } from 'igniteui-angular/grid/cell.component'
   encapsulation: ViewEncapsulation.None
 })
 export class StockGridComponent implements OnInit, AfterViewInit {
-  @Input() public tickerSelected: Function
+  @Output() public stockSelected = new EventEmitter<WikiPriceData>()
 
   stockData: WikiPriceData[]
 
@@ -32,6 +33,6 @@ export class StockGridComponent implements OnInit, AfterViewInit {
   }
 
   onSelection(cell: IgxGridCellComponent) {
-    this.tickerSelected(cell.row.rowData.Ticker)
+    this.stockSelected.emit(cell.row.rowData)
   }
 }

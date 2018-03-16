@@ -1,7 +1,6 @@
 <div class="grid-container">
-	<igx-grid id="grid1" #grid1 [data]="stockData" (onSelection)="onSelection($event)" [height]="'700px'" [width]="'1200px'">
+	<igx-grid id="grid1" #grid1 [data]="stockData" (onSelection)="onSelection($event)" [height]="'700px'" [width]="'1050px'">
 		<igx-column field="Ticker" [sortable]="true" header="Ticker" [filterable]="true" width="100px"></igx-column>
-		<igx-column field="TimeStamp" header="Date" [dataType]="Date" width="200px"></igx-column>
 		<igx-column field="Open" header="Open" width="100px"></igx-column>
 		<igx-column field="High" header="High" width="100px"></igx-column>
 		<igx-column field="Low" header="Low" width="100px"></igx-column>

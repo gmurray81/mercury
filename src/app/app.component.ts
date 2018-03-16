@@ -10,8 +10,9 @@ import { WikiPriceData } from './models/wikiPriceData'
 	styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+	selectedStock: WikiPriceData
 
-	selectTicker(ticker: string) {
-		console.log('clicked: ' + ticker)
+	onStockSelected(stockSelection: WikiPriceData) {
+		this.selectedStock = stockSelection
 	}
 }
