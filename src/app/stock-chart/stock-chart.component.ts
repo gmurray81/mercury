@@ -192,6 +192,7 @@ export class StockChartComponent implements OnInit, AfterViewInit {
     });
     fin.desktop.InterApplicationBus.subscribe("*", "igDemo:wpfChartRemoveFromSelection", (m, uuid, name) => {
       let date = new Date(m.item.TimeStamp);
+      let item: any = null;
       for (let i = 0; i < self.stockData.length; i++) {
         if (self.stockData[i].TimeStamp.getFullYear() === date.getFullYear() &&
             self.stockData[i].TimeStamp.getMonth() === date.getMonth() &&
@@ -199,8 +200,25 @@ export class StockChartComponent implements OnInit, AfterViewInit {
             self.stockData[i].TimeStamp.getHours() === date.getHours() &&
             self.stockData[i].TimeStamp.getMinutes() === date.getMinutes() &&
             self.stockData[i].TimeStamp.getSeconds() === date.getSeconds()) {
-            self.stockData[i].Selected = false;
+            item = self.stockData[i];
+            break;
           }
+        }
+
+        if (item != null) {
+          if (item.SelectionStart >= 0) {
+            let selectionStart = item.SelectionStart;
+            let selectionEnd = item.SelectionEnd;
+            for (let ind = selectionStart; ind <= selectionEnd; ind++) {
+               this.stockData[ind].Selected = false;
+               (<any>this.stockData[ind]).SelectionStart = -1;
+               (<any>this.stockData[ind]).SelectionEnd = -1;
+            }
+         } else if (item.Selected) {
+           item.Selected = false;
+         } else {
+           item.Selected = true;
+         }
         }
       if (this.chart) {
         this.chart.notifyVisualPropertiesChanged();
