@@ -8,6 +8,7 @@ import { StockData } from '../models/stockData'
 declare function require(url: string)
 const quandleData = require('../data/quandl.json')
 const alphaVantageData = require('../data/alphaVantage.json')
+const allData = require('../data/randomData.json');
 
 @Injectable()
 export class StockDataService {
@@ -35,11 +36,23 @@ export class StockDataService {
         }
     }
 
-    public getTickerHistory(stock: WikiPriceData): StockData[] {
-        if (this.tickerHistories[stock.Ticker])
-            return this.tickerHistories[stock.Ticker]
-        else
-            return this.tickerHistories[stock.Ticker] = this.generateStockHistory(stock)
+    private _dataCounter = 0;
+
+    public getTickerHistory(stock: string): StockData[] {
+        let currData = allData[this._dataCounter];
+        this._dataCounter++;
+        if (this._dataCounter > allData.length - 1) {
+            this._dataCounter = 0;
+        }
+        for (let i = 0; i < currData.length; i++) {
+            currData[i].TimeStamp = new Date(currData[i].TimeStamp)
+            currData[i].Selected = false;
+        }
+        return currData;
+        // if (this.tickerHistories[stock.Ticker])
+        //     return this.tickerHistories[stock.Ticker]
+        // else
+        //     return this.tickerHistories[stock.Ticker] = this.generateStockHistory(stock)
     }
 
     generateStockHistory(finalStockRecord: WikiPriceData): StockData[] {

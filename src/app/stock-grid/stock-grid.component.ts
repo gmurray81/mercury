@@ -54,7 +54,7 @@ export class StockGridComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.stockData = this.stockDataService.getMarketData()
-    this.histData = this.stockDataService.getHistoricData()
+    this.histData = this.stockDataService.getTickerHistory("AAPL");
   }
 
   ngAfterViewInit() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, Input } from '@angular/core'
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, ViewChild, Input, NgZone } from '@angular/core'
 
 import { StockData } from '../models/stockData'
 import { StockDataService } from '../services/stock-data.service'
@@ -39,7 +39,21 @@ export class StockChartComponent implements OnInit, AfterViewInit {
     if (!ev.args.item) {
       return;
     }
-    ev.args.item.Selected = !ev.args.item.Selected;
+
+    if (ev.args.item.SelectionStart >= 0) {
+       let selectionStart = ev.args.item.SelectionStart;
+       let selectionEnd = ev.args.item.SelectionEnd;
+       for (let ind = selectionStart; ind <= selectionEnd; ind++) {
+          this.stockData[ind].Selected = false;
+          (<any>this.stockData[ind]).SelectionStart = -1;
+          (<any>this.stockData[ind]).SelectionEnd = -1;
+       }
+    } else if (ev.args.item.Selected) {
+      ev.args.item.Selected = false;
+    } else {
+      ev.args.item.Selected = true;
+    }
+
     if (this.chart) {
       this.chart.notifyVisualPropertiesChanged();
     }
@@ -83,7 +97,21 @@ export class StockChartComponent implements OnInit, AfterViewInit {
 
   colorSelected(ev: { sender: any, args: AssigningCategoryStyleEventArgs }) {
     let items = ev.args.getItems(ev.args.startIndex, ev.args.endIndex);
+
+    let selected = false;
     for (let i = 0; i < items.length; i++) {
+      if (items[i].Selected) {
+        selected = true;
+      }
+    }
+
+    for (let i = 0; i < items.length; i++) {
+      if (selected) {
+         items[i].SelectionStart = ev.args.startIndex;
+         items[i].SelectionEnd = ev.args.endIndex;
+      } else {
+         items[i].SelectionStart = -1;
+      }
       if (items[i].Selected) {
         ev.args.fill = "orange";
         ev.args.stroke = "darkOrange"
@@ -110,8 +138,21 @@ export class StockChartComponent implements OnInit, AfterViewInit {
 
   private onMain() {
     let self = this;
+
+    fin.desktop.InterApplicationBus.subscribe("*", "igDemo:wpfChartWindowChanged", (m, uuid, name) => {
+      this.chart.windowRect = m;
+    });
+
+    fin.desktop.InterApplicationBus.subscribe("*", "igDemo:changeTicker", (m, uuid, name) => {
+      this._ngZone.run(() => {
+        this.stockData = this.stockDataService.getTickerHistory(m.symbol);
+      });
+    });
+
+
     fin.desktop.InterApplicationBus.subscribe("*", "igDemo:gridAddToSelection", (m, uuid, name) => {
       let date = new Date(m.item.TimeStamp);
+      
       for (let i = 0; i < self.stockData.length; i++) {
       if (self.stockData[i].TimeStamp.getTime() === date.getTime()) {
           self.stockData[i].Selected = true;
@@ -132,6 +173,40 @@ export class StockChartComponent implements OnInit, AfterViewInit {
         this.chart.notifyVisualPropertiesChanged();
       }
     });
+
+    fin.desktop.InterApplicationBus.subscribe("*", "igDemo:wpfChartAddToSelection", (m, uuid, name) => {
+      let date = new Date(m.item.TimeStamp);
+      for (let i = 0; i < self.stockData.length; i++) {
+      if (self.stockData[i].TimeStamp.getFullYear() === date.getFullYear() &&
+          self.stockData[i].TimeStamp.getMonth() === date.getMonth() &&
+          self.stockData[i].TimeStamp.getDate() === date.getDate() &&
+          self.stockData[i].TimeStamp.getHours() === date.getHours() &&
+          self.stockData[i].TimeStamp.getMinutes() === date.getMinutes() &&
+          self.stockData[i].TimeStamp.getSeconds() === date.getSeconds()) {
+          self.stockData[i].Selected = true;
+        }
+      }
+      if (this.chart) {
+        this.chart.notifyVisualPropertiesChanged();
+      }
+    });
+    fin.desktop.InterApplicationBus.subscribe("*", "igDemo:wpfChartRemoveFromSelection", (m, uuid, name) => {
+      let date = new Date(m.item.TimeStamp);
+      for (let i = 0; i < self.stockData.length; i++) {
+        if (self.stockData[i].TimeStamp.getFullYear() === date.getFullYear() &&
+            self.stockData[i].TimeStamp.getMonth() === date.getMonth() &&
+            self.stockData[i].TimeStamp.getDate() === date.getDate() &&
+            self.stockData[i].TimeStamp.getHours() === date.getHours() &&
+            self.stockData[i].TimeStamp.getMinutes() === date.getMinutes() &&
+            self.stockData[i].TimeStamp.getSeconds() === date.getSeconds()) {
+            self.stockData[i].Selected = false;
+          }
+        }
+      if (this.chart) {
+        this.chart.notifyVisualPropertiesChanged();
+      }
+    });
+
     fin.desktop.InterApplicationBus.subscribe("*", "igDemo:gridJoined", (m, uuid, name) => {
       for (let i = 0; i < this.stockData.length; i++) {
         if (this.stockData[i].Selected) {
@@ -145,14 +220,14 @@ export class StockChartComponent implements OnInit, AfterViewInit {
 
   public stockData: StockData[]
   title = 'chart'
-  constructor(private stockDataService: StockDataService) { }
+  constructor(private stockDataService: StockDataService, private _ngZone: NgZone) { }
 
   ngOnInit() {
-    this.stockData = this.stockDataService.getHistoricData()
+    this.stockData = this.stockDataService.getTickerHistory("AAPL")
   }
 
   @Input()
-  public set stockDisplayed(stockSelection: WikiPriceData) {
+  public set stockDisplayed(stockSelection: string) {
     this.stockData = this.stockDataService.getTickerHistory(stockSelection)
   }
 }
