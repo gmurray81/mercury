@@ -45,8 +45,13 @@ export class StockChartComponent implements OnInit, AfterViewInit {
        let selectionEnd = ev.args.item.SelectionEnd;
        for (let ind = selectionStart; ind <= selectionEnd; ind++) {
           this.stockData[ind].Selected = false;
+          
           (<any>this.stockData[ind]).SelectionStart = -1;
           (<any>this.stockData[ind]).SelectionEnd = -1;
+
+          fin.desktop.InterApplicationBus.publish('igDemo:chartRemoveFromSelection', {
+            item: this.stockData[ind]
+          });
        }
     } else if (ev.args.item.Selected) {
       ev.args.item.Selected = false;
@@ -217,7 +222,7 @@ export class StockChartComponent implements OnInit, AfterViewInit {
          } else if (item.Selected) {
            item.Selected = false;
          } else {
-           item.Selected = true;
+           //item.Selected = true;
          }
         }
       if (this.chart) {

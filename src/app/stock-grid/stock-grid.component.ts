@@ -88,6 +88,12 @@ export class StockGridComponent implements OnInit, AfterViewInit {
       self._ngZone.run(() => self.grid1.markForCheck());
     });
 
+    fin.desktop.InterApplicationBus.subscribe("*", "igDemo:changeTicker", (m, uuid, name) => {
+      this._ngZone.run(() => {
+        this.histData = this.stockDataService.getTickerHistory(m.symbol);
+      });
+    });
+
     fin.desktop.InterApplicationBus.subscribe("*", "igDemo:chartRemoveFromSelection", (m, uuid, name) => {
       let date = new Date(m.item.TimeStamp);
     
